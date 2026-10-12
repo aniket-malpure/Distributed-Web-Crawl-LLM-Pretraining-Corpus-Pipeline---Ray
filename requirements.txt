@@ -1,0 +1,13 @@
+ray>=2.9
+trafilatura>=1.8
+warcio>=1.7
+pyarrow>=15
+pyspark>=3.5
+numpy>=1.26
+pandas>=2.0
+prometheus_client>=0.19
+pyyaml>=6
+requests>=2.31
+pyiceberg[sql-sqlite,pyarrow]>=0.7
+sqlalchemy>=2
+pytest>=8

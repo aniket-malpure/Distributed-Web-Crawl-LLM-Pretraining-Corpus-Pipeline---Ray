@@ -1,0 +1,53 @@
+# Every key is optional; omitted keys fall back to the dataclass defaults in src/crawlpipe/config.py.
+extract:
+  extractor: trafilatura_precision   # trafilatura_precision | trafilatura_recall | trafilatura_baseline | naive_strip
+  min_chars: 200
+  max_html_bytes: 5000000
+
+quality:
+  target_langs: [en]
+  min_lang_conf: 0.5
+  min_words: 50
+  max_words: 100000
+  min_mean_word_len: 3.0
+  max_mean_word_len: 10.0
+  max_symbol_word_ratio: 0.1
+  min_alpha_word_frac: 0.8
+  min_stopwords: 2
+  max_bullet_line_frac: 0.9
+  max_ellipsis_line_frac: 0.3
+  max_dup_line_frac: 0.30
+  max_dup_line_char_frac: 0.30
+  max_dup_para_frac: 0.30
+  max_dup_para_char_frac: 0.30
+
+crawl:
+  num_cpus: null            # null = all local CPUs, or the attached Ray cluster
+  max_in_flight: 16         # concurrent shard tasks
+  max_task_retries: 3
+  batch_rows: 2000          # rows per Parquet row group
+  max_records_per_shard: null
+  metrics_port: null        # e.g. 9100 to serve Prometheus /metrics from the driver
+  # live crawler politeness (use a real contact address!)
+  user_agent: "crawlpipe/0.1 (+mailto:crawler-admin@example.com)"
+  min_domain_delay_s: 1.0
+  request_timeout_s: 15.0
+  max_urls_per_task: 200
+  respect_robots: true
+
+dedup:
+  num_perm: 128
+  threshold: 0.8            # target Jaccard similarity for near-duplicates
+  ngram: 5                  # word shingle size
+  seed: 1
+  max_cc_iters: 30
+  spark_master: "local[*]"
+  shuffle_partitions: 64
+  driver_memory: "8g"
+
+publish:
+  root: corpus
+  iceberg: false
+  max_rows_per_file: 250000
+  max_rows_per_group: 50000
+  partition_by_lang: true

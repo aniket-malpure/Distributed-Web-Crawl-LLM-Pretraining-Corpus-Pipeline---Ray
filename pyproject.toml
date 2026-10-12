@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crawlpipe"
+version = "0.1.0"
+description = "Ray-distributed web crawl ingestion, Spark MinHash-LSH dedup and versioned Parquet/Iceberg corpus delivery for LLM pre-training"
+requires-python = ">=3.10"
+dependencies = [
+  "ray>=2.9",
+  "trafilatura>=1.8",
+  "warcio>=1.7",
+  "pyarrow>=15",
+  "pyspark>=3.5",
+  "numpy>=1.26",
+  "pandas>=2.0",
+  "prometheus_client>=0.19",
+  "pyyaml>=6",
+  "requests>=2.31",
+]
+
+[project.optional-dependencies]
+iceberg = ["pyiceberg[sql-sqlite,pyarrow]>=0.7", "sqlalchemy>=2"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+crawlpipe = "crawlpipe.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: end-to-end tests that start Ray and Spark"]
+addopts = "-q"
